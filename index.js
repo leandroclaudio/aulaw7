@@ -9,8 +9,13 @@
 import express, { request } from 'express' //com express é mais fácil
 import * as dotenv from 'dotenv'
 import employeeRouter from './routes/employee.routes.js'
+import todoRouter from './routes/todo.routes.js'
+import dbConnect from './config/db.config.js'
 
-dotenv.config()
+dotenv.config() 
+
+dbConnect()
+
 const app = express() //a partir de agora eu chamo com app
 app.use(express.json())
 
@@ -19,7 +24,7 @@ app.use('/employee', employeeRouter)
 // http://localhost:8080/employee/create
 // http://localhost:8080/employee/edit/:id
 
-// app.use('/to-do', todoRouter)
+app.use('/to-do', todoRouter)
 
 // http://localhost:8080/to-do/
 // http://localhost:8080/to-do/create
