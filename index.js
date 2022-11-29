@@ -8,79 +8,23 @@
 
 import express, { request } from 'express' //com express é mais fácil
 import * as dotenv from 'dotenv'
-import { v4 as uuidv4 } from 'uuid'
+import employeeRouter from './routes/employee.routes.js'
 
 dotenv.config()
 const app = express() //a partir de agora eu chamo com app
 app.use(express.json())
 
-//array
-let data = [
-    {
-        name: "Ana",
-        department: "T.I"
-    }
-]
+app.use('/employee', employeeRouter)
+// http://localhost:8080/employee/
+// http://localhost:8080/employee/create
+// http://localhost:8080/employee/edit/:id
 
-// método get
-app.get('/', (request, response) => {
-    //no json temos a resposta que queremos obter
-    //sempre retornamos algo (uma resposta)
-    return response.status(200).json(data)
+// app.use('/to-do', todoRouter)
 
-})
+// http://localhost:8080/to-do/
+// http://localhost:8080/to-do/create
+// http://localhost:8080/to-do/edit/:id
 
-//método post
-app.post('/create', (request, response) => {
-    const newData = {
-        //capturar o body da requisição e adicionar id
-        ...request.body,
-        id: uuidv4() 
-
-    }
-
-    data.push(newData)
-
-    return response.status(201).json(data)
-})
-
-//método put
-app.put('/edit/:id', (request, response) => {
-    //seta o id como um parâmetro
-    const { id } = request.params
-
-    //reconhecendo o item
-    const update = data.find(
-        item => item.id === id
-    )
-
-    const index = data.indexOf(update)
-
-    //array[posição] = item
-    //atualizando item existente
-    data[index] = {
-        ...update,
-        ...request.body
-    }
-
-    return response.status(200).json(data[index])
-})
-
-//método delete
-app.delete('/delete/:id', (request, response) => {
-    const { id } = request.params
-
-    const deleteById = data.find(
-        item => item.id === id
-    )
-
-    const index = data.indexOf(deleteById)
-
-    //exclui so o item que está posicionado no index
-    data.splice(index, 1)
-
-    return response.status(200).json(data)
-})
 
 app.listen(Number(process.env.PORT), () => console.log('server on port 8080!'))
 
